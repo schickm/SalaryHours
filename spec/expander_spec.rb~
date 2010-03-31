@@ -1,0 +1,93 @@
+require "expander"
+
+describe Expander do
+  before(:each) do
+    @exp = Expander.new
+  end
+
+  describe "#run" do
+    describe "with []" do
+      it "should return []" do
+        @exp.run([]).should == []
+      end
+    end
+
+    describe "with nil" do
+      it "should return []" do
+        @exp.run(nil).should == []
+      end
+    end
+   
+    describe "with a complex list" do
+      it "should return listings grouped by date with date applied to all" do
+        start = [{"1/2/10" =>
+                   [
+                    {"site setup" => "1:46pm - 2:20pm"},
+                    {"wordpress setup" => "2:20pm - 3:43pm"}]}]
+        result = [
+                  { :date => "1/2/10",
+                    :label => "site setup",
+                    :start => "1:46pm",
+                    :end => "2:20pm" },
+                  { :date => "1/2/10",
+                    :label => "wordpress setup",
+                    :start => "2:20pm",
+                    :end => "3:43pm" }]
+        @exp.run(start).should == result
+      end
+    end
+  end
+
+  describe "#merge_data" do
+    before(:each) do
+      @params = {}
+    end
+
+    describe "with '1/2/10'" do
+      before(:each) do
+        @params = @exp.merge_data(@params, '1/2/10')
+      end
+      
+      it "should add :data to params" do
+        @params.should include(:date)
+      end
+
+      it "should add time to params[:data] of 1/2/2010" do
+        @params[:date].strftime("%m/%d/%Y").should == "01/02/2010"
+      end
+    end
+    
+    
+    describe "with 'some task label'" do
+      before(:each) do
+        @params = @exp.merge_data(@params, 'some task label')
+      end
+
+      it "should add :label to params" do
+        @params.should include(:label)
+      end
+
+      it "should add 'some task label' to params[:label]'" do
+        @params[:label].should == 'some task label'
+      end
+    end
+
+    describe "with '8:55pm - 9:13pm'" do
+      before(:each) do
+        @params = @exp.merge_data(@params, '8:55pm - 9:13pm')
+      end
+
+      it "should add :time to params" do
+        @params.should include(:time)
+      end
+
+      it "should add 8:55pm in params[:time][:start]" do
+        @params[:time][:start].strftime("%I:%M%p").should == '08:55PM'
+      end
+
+      it "should add 9:13pm in params[:time][:end]" do
+        @params[:time][:end].strftime("%I:%M%p").should == '09:13PM'
+      end
+    end
+  end
+end
