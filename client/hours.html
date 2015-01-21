@@ -1,0 +1,77 @@
+<head>
+  <title>Hours</title>
+</head>
+
+<template name='layout'>
+	<div class='container'>
+		{{> loginButtons}}
+		<div class='row'>
+			{{> yield}}
+		</div>
+	</div>
+</template>
+
+<template name='loading'>
+	{{>spinner}}
+</template>
+
+<template name='home'>
+	{{#if currentUser}}
+		{{> createDuration}}	
+		{{> openDurations}}
+		{{> taskTotals}}
+	{{/if}}
+</template>
+
+<template name='taskDetail'>
+	<h1>{{task.name}}</h1>
+
+	<ul>
+		{{#each durations}}
+			<li>{{startDate}} - {{taskInterval}}</li>
+		{{/each}}
+	</ul>
+</template>
+
+<template name='createDuration'>
+	<div class='col-sm-12'>
+		<form class='form-inline'>
+			<div class='form-group {{errorClass 'taskName'}}'>
+				<div class='controls'>
+					<input type='text' class='form-control typeahead' name='task' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' />	
+					<span class='help-block'>{{errorMessage 'taskName'}}</span>	
+				</div>
+			</div>
+			<div class='form-group'>
+				<div class='controls'>
+					<button type='submit' class='btn btn-primary submit'>START</button>		
+				</div>
+				
+			</div>		
+		</form>
+	</div>
+</template>
+
+
+<template name='openDurations'>
+	{{#each durations}}
+		{{> openDuration}}
+	{{/each}}
+</template>
+
+
+<template name='openDuration'>
+	<p>
+		{{taskName}} started {{fromNow start}}
+		<button class='btn btn-default'>Stop</button>
+	</p>
+</template>
+
+<template name='taskTotals'>
+	<h2>Task Totals</h2>
+	<ul>
+		{{#each tasks}}
+			<li><a href='{{pathFor 'taskDetail'}}'>{{name}}</a> - {{taskInterval duration}} hrs</li>
+		{{/each}}
+	</ul>
+</template>
