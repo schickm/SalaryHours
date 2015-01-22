@@ -76,32 +76,14 @@ Template.taskDetail.helpers({
     }
 });
 
-Template.registerHelper('taskInterval', function(millis) {
-    var mom = moment.duration(millis),
-        hours = mom.as('hours');
-
-    return (hours > 1 ? hours.toFixed() : hours.toFixed(2));
-});
-
-Template.registerHelper('errorMessage', function(field) {
-    return Session.get('formErrors')[field];
-});
-
-var fromNowDep = new Deps.Dependency();
-var fromNowInterval;
-
-Template.registerHelper('fromNow', function(millis) {
-    fromNowDep.depend();
-
-    if (! fromNowInterval) {
-        fromNowInterval = setInterval(function() {
-            console.log('updating fromNowDep');
-            fromNowDep.changed();
-        }, 60000);
+Template.taskDetail.events({
+    'click .delete-duration': function(e) {
+        e.preventDefault();
+        Meteor.call('removeDuration', this._id);
+    },
+    'click .delete-task': function(e) {
+        e.preventDefault();
+        Meteor.call('removeTask', this.task._id);
+        Router.go('home');
     }
-    return moment(millis).fromNow();
-});
-
-Template.registerHelper('errorClass', function(field) {
-    return !!Session.get('formErrors')[field] ? 'has-error' : '';
 });

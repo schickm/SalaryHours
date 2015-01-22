@@ -13,3 +13,5 @@ sergeyt:typeahead
 mrt:moment
 iron:router
 sacha:spin
+meteorhacks:aggregate
+percolate:migrations

@@ -5,9 +5,7 @@
 <template name='layout'>
 	<div class='container'>
 		{{> loginButtons}}
-		<div class='row'>
 			{{> yield}}
-		</div>
 	</div>
 </template>
 
@@ -24,31 +22,33 @@
 </template>
 
 <template name='taskDetail'>
-	<h1>{{task.name}}</h1>
+	<h1>{{task.name}} - {{taskInterval task.duration}} hrs <a class='delete-task' href='#'>X</a></h1>
 
 	<ul>
 		{{#each durations}}
-			<li>{{startDate}} - {{taskInterval}}</li>
+			<li>{{startDate}} - {{taskInterval duration}} hrs <a class='delete-duration' href="#">X</a></li>
 		{{/each}}
 	</ul>
 </template>
 
 <template name='createDuration'>
-	<div class='col-sm-12'>
-		<form class='form-inline'>
-			<div class='form-group {{errorClass 'taskName'}}'>
-				<div class='controls'>
-					<input type='text' class='form-control typeahead' name='task' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' />	
-					<span class='help-block'>{{errorMessage 'taskName'}}</span>	
+	<div class='row'>
+		<div class='col-sm-12'>
+			<form class='form-inline'>
+				<div class='form-group {{errorClass 'taskName'}}'>
+					<div class='controls'>
+						<input type='text' class='form-control typeahead' name='task' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' />	
+						<span class='help-block'>{{errorMessage 'taskName'}}</span>	
+					</div>
 				</div>
-			</div>
-			<div class='form-group'>
-				<div class='controls'>
-					<button type='submit' class='btn btn-primary submit'>START</button>		
-				</div>
-				
-			</div>		
-		</form>
+				<div class='form-group'>
+					<div class='controls'>
+						<button type='submit' class='btn btn-primary submit'>START</button>		
+					</div>
+					
+				</div>		
+			</form>
+		</div>
 	</div>
 </template>
 
@@ -61,17 +61,26 @@
 
 
 <template name='openDuration'>
-	<p>
-		{{taskName}} started {{fromNow start}}
-		<button class='btn btn-default'>Stop</button>
-	</p>
+	<div class='row'>
+		<div class='col-sm-12'>
+			<p>
+				{{taskName}} started {{fromNow start}}
+				<button class='btn btn-default'>Done</button>
+			</p>		
+		</div>
+	</div>
+	
 </template>
 
 <template name='taskTotals'>
-	<h2>Task Totals</h2>
-	<ul>
-		{{#each tasks}}
-			<li><a href='{{pathFor 'taskDetail'}}'>{{name}}</a> - {{taskInterval duration}} hrs</li>
-		{{/each}}
-	</ul>
+	<div class='row'>
+		<div class='col-sm-12'>
+			<h2>Task Totals</h2>
+			<ul>
+				{{#each tasks}}
+					<li><a href='{{pathFor 'taskDetail'}}'>{{name}}</a> - {{taskInterval duration}} hrs</li>
+				{{/each}}
+			</ul>	
+		</div>
+	</div>
 </template>

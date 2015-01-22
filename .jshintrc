@@ -132,6 +132,7 @@
       
       // custom global vars I make
       "Hours": true,
-      "moment": false     
+      "moment": false,
+      "Migrations": false
     }
 }
