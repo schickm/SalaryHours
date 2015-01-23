@@ -1,32 +1,35 @@
 /* used to be middle, but would cause form-groups to mis align when errors were present */
 .form-inline .form-group {
 	vertical-align: top;
+  margin-top: 15px;
 }
 
 .typeahead {
 	border-radius: 0;
 }
 
-.form-inline .typeahead,
-.tt-dropdown-menu {
-	width: 400px;
+.twitter-typeahead, 
+.tt-dropdown-menu, 
+.twitter-typeahead .form-control,
+.submit {
+  width: 100%;
+}
+
+.task-input-wrapper {
+  padding-right: 7.5px;
+}
+
+.start-wrapper {
+  padding-left: 7.5px;
 }
 
 .typeahead,
-.tt-query,
-.tt-hint {
-	
+.tt-hint {	
 	padding: 4px 12px;
 }
 
 .typeahead {
   background-color: #fff;
-}
-
-.tt-query {
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .tt-hint {

@@ -1,86 +1,112 @@
 <head>
   <title>Hours</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes"> 
 </head>
 
 <template name='layout'>
-	<div class='container'>
-		{{> loginButtons}}
-			{{> yield}}
-	</div>
+    {{> header}}
+    <div class='container'>
+        {{> yield}}
+    </div>
+</template>
+
+<template name='header'>
+    <nav class='nav navbar-default navbar-static-top'>
+        <div class='container'>
+            <div class='navbar-header'>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#salaryhours-nav-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href='{{pathFor  'home'}}' class='navbar-brand'>Salary Hours</a>
+            </div>
+
+            <div class='collapse navbar-collapse' id='salaryhours-nav-collapse'>
+                <ul class='nav navbar-nav'>
+                    <li>blah blah</li>
+                </ul>
+
+                <ul class='nav navbar-nav navbar-right'>
+                    {{> loginButtons}}
+                </ul>
+            </div>
+        </div>
+    </nav>
 </template>
 
 <template name='loading'>
-	{{>spinner}}
+    {{>spinner}}
 </template>
 
 <template name='home'>
-	{{#if currentUser}}
-		{{> createDuration}}	
-		{{> openDurations}}
-		{{> taskTotals}}
-	{{/if}}
+    {{#if currentUser}}
+        {{> createDuration}}    
+        {{> openDurations}}
+        {{> taskTotals}}
+    {{/if}}
 </template>
 
 <template name='taskDetail'>
-	<h1>{{task.name}} - {{taskInterval task.duration}} hrs <a class='delete-task' href='#'>X</a></h1>
+    <h1>{{task.name}} - {{taskInterval task.duration}} hrs <a class='delete-task' href='#'>X</a></h1>
 
-	<ul>
-		{{#each durations}}
-			<li>{{startDate}} - {{taskInterval duration}} hrs <a class='delete-duration' href="#">X</a></li>
-		{{/each}}
-	</ul>
+    <ul>
+        {{#each durations}}
+            <li>{{startDate}} - {{taskInterval duration}} hrs <a class='delete-duration' href="#">X</a></li>
+        {{/each}}
+    </ul>
 </template>
 
 <template name='createDuration'>
-	<div class='row'>
-		<div class='col-sm-12'>
-			<form class='form-inline'>
-				<div class='form-group {{errorClass 'taskName'}}'>
-					<div class='controls'>
-						<input type='text' class='form-control typeahead' name='task' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' />	
-						<span class='help-block'>{{errorMessage 'taskName'}}</span>	
-					</div>
-				</div>
-				<div class='form-group'>
-					<div class='controls'>
-						<button type='submit' class='btn btn-primary submit'>START</button>		
-					</div>
-					
-				</div>		
-			</form>
-		</div>
-	</div>
+    <div class='row'>
+        <form class='form-inline'>
+            <div class='form-group task-input-wrapper {{errorClass 'taskName'}} col-xs-8 col-sm-7 col-sm-offset-1 col-md-6 col-md-offset-2 col-lg-5 col-lg-offset-3'>
+                <div class='controls'>
+                    <input type='text' class='form-control input-lg typeahead' name='task' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' /> 
+                    <span class='help-block'>{{errorMessage 'taskName'}}</span> 
+                </div>
+            </div>
+
+            <div class='form-group start-wrapper col-xs-4 col-sm-3 col-md-2 col-lg-2'>
+                <div class='controls'>
+                    <button type='submit' class='btn btn-lg btn-primary submit'>START</button>     
+                </div>
+            </div>          
+        </form>
+    </div>
 </template>
 
 
 <template name='openDurations'>
-	{{#each durations}}
-		{{> openDuration}}
-	{{/each}}
+    {{#each durations}}
+        {{> openDuration}}
+    {{/each}}
 </template>
 
 
 <template name='openDuration'>
-	<div class='row'>
-		<div class='col-sm-12'>
-			<p>
-				{{taskName}} started {{fromNow start}}
-				<button class='btn btn-default'>Done</button>
-			</p>		
-		</div>
-	</div>
-	
+    <div class='row'>
+        <div class='col-sm-12'>
+            <p>
+                {{taskName}} started {{fromNow start}}
+                <button class='btn btn-default'>Done</button>
+            </p>        
+        </div>
+    </div>
+    
 </template>
 
 <template name='taskTotals'>
-	<div class='row'>
-		<div class='col-sm-12'>
-			<h2>Task Totals</h2>
-			<ul>
-				{{#each tasks}}
-					<li><a href='{{pathFor 'taskDetail'}}'>{{name}}</a> - {{taskInterval duration}} hrs</li>
-				{{/each}}
-			</ul>	
-		</div>
-	</div>
+    <div class='row'>
+        <div class='col-sm-12'>
+            <h2>Task Totals</h2>
+            <ul>
+                {{#each tasks}}
+                    <li><a href='{{pathFor 'taskDetail'}}'>{{name}}</a> - {{taskInterval duration}} hrs</li>
+                {{/each}}
+            </ul>   
+        </div>
+    </div>
 </template>

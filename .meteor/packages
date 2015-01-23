@@ -6,7 +6,6 @@
 
 meteor-platform
 insecure
-accounts-ui
 accounts-password
 twbs:bootstrap
 sergeyt:typeahead
@@ -15,3 +14,4 @@ iron:router
 sacha:spin
 meteorhacks:aggregate
 percolate:migrations
+ian:accounts-ui-bootstrap-3
