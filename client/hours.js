@@ -1,6 +1,5 @@
 'use strict';
 
-
 function methodErrorHandler (error) {
     if (error) {
         throw error;
@@ -31,7 +30,7 @@ Template.createDuration.helpers({
 });
 
 Template.createDuration.events({
-    'submit form': function(e, template) {
+    'submit form': function(e) {
         e.preventDefault();
         var $task = $(e.target).find('[name=task]'),
             taskName = $task.val();
@@ -84,7 +83,26 @@ Template.taskDetail.events({
     },
     'click .delete-task': function(e) {
         e.preventDefault();
-        Meteor.call('removeTask', this.task._id);
-        Router.go('home');
+        if (confirm('This will completely remove all hours for this task and readjust any totals...you sure?')) {
+            Meteor.call('removeTask', this.task._id);
+            Router.go('home');    
+        }
+        
     }
 });
+
+Template.settings.events({
+    'submit form': function(e) {
+        e.preventDefault();
+        var salaryValue = parseInt($(e.target).find('[name=yearlySalary]').val());
+        
+        if (salaryValue) {
+            Meteor.call('setUserYearlySalary', salaryValue);    
+            Router.go('home');
+        } else {
+            setFormError('yearlySalary', 'A salary must be provided');
+        }
+        
+
+    }
+})

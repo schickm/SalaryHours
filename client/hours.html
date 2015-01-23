@@ -1,5 +1,5 @@
 <head>
-  <title>Hours</title>
+  <title>Salary Hours</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes"> 
 </head>
@@ -25,12 +25,12 @@
             </div>
 
             <div class='collapse navbar-collapse' id='salaryhours-nav-collapse'>
-                <ul class='nav navbar-nav'>
-                    <li>blah blah</li>
+                <ul class='nav navbar-nav navbar-right'>
+                    {{> loginButtons}}
                 </ul>
 
                 <ul class='nav navbar-nav navbar-right'>
-                    {{> loginButtons}}
+                    <li class='{{isActiveRoute regex='settings'}}'><a href='{{pathFor 'settings'}}'>Settings</a></li>
                 </ul>
             </div>
         </div>
@@ -80,33 +80,65 @@
 
 
 <template name='openDurations'>
-    {{#each durations}}
-        {{> openDuration}}
-    {{/each}}
+    <div class='row'>
+        {{#each durations}}
+            {{> openDuration}}
+        {{/each}}
+    </div>
 </template>
 
 
 <template name='openDuration'>
-    <div class='row'>
-        <div class='col-sm-12'>
-            <p>
-                {{taskName}} started {{fromNow start}}
-                <button class='btn btn-default'>Done</button>
-            </p>        
-        </div>
-    </div>
-    
+    <div class='col-sm-12'>
+        <p>
+            {{taskName}} started {{fromNow start}}
+            <button class='btn btn-default'>Done</button>
+        </p>        
+    </div>    
 </template>
 
 <template name='taskTotals'>
     <div class='row'>
         <div class='col-sm-12'>
-            <h2>Task Totals</h2>
-            <ul>
-                {{#each tasks}}
-                    <li><a href='{{pathFor 'taskDetail'}}'>{{name}}</a> - {{taskInterval duration}} hrs</li>
-                {{/each}}
-            </ul>   
+            <h3 class='sub-header'>Task Totals</h3>
+            <table class='table table-striped'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Hours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each tasks}}
+                        <tr>
+                            <td><a href='{{pathFor 'taskDetail'}}'>{{name}}</a></td>
+                            <td>{{taskInterval duration}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
         </div>
+    </div>
+</template>
+
+
+<template name='settings'>
+    <div class='col-sm-12'>
+        <h2>Settings</h2>
+        <form class='form'>
+            {{> settingsInput name='yearlySalary' label='Yearly Salary' value=currentUser.profile.yearlySalary}}
+
+            <div class='form-group'>
+                <button type='submit' class='btn btn-primary'>Submit</button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<template name='settingsInput'>
+    <div class='form-group {{errorClass name}}'>
+        <label for='{{name}}'>{{label}}</label>
+        <input type='text' class='form-control' name='{{name}}' value='{{value}}' id='{{name}}' />
+        <p class='help-block'>{{errorMessage name}}</p>
     </div>
 </template>
