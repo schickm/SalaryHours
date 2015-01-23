@@ -19,7 +19,7 @@ Meteor.startup(function() {
 
 
 Template.createDuration.rendered = function() {
-    Meteor.typeahead.inject('.typeahead');
+    Meteor.typeahead($('.typeahead'));
 };
 
 Template.createDuration.helpers({
@@ -31,7 +31,7 @@ Template.createDuration.helpers({
 });
 
 Template.createDuration.events({
-    'submit form': function(e) {
+    'submit form': function(e, template) {
         e.preventDefault();
         var $task = $(e.target).find('[name=task]'),
             taskName = $task.val();
@@ -42,7 +42,7 @@ Template.createDuration.events({
             Meteor.call('startDuration', taskName, methodErrorHandler);    
         }        
             
-        $task.val('');
+        $task.typeahead('val', '');
     }
 });
 
@@ -53,7 +53,8 @@ Template.openDurations.helpers({
 });
 
 Template.openDuration.events({
-    'click button': function() {
+    'click button': function(e) {
+        e.preventDefault();
         Meteor.call('endDuration', this._id, methodErrorHandler);
     }
 });

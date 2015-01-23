@@ -19,7 +19,6 @@ Template.registerHelper('fromNow', function(millis) {
 
     if (! fromNowInterval) {
         fromNowInterval = setInterval(function() {
-            console.log('updating fromNowDep');
             fromNowDep.changed();
         }, 60000);
     }
