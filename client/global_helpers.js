@@ -11,18 +11,18 @@ Template.registerHelper('errorMessage', function(field) {
     return Session.get('formErrors')[field];
 });
 
-var fromNowDep = new Deps.Dependency();
+var fromNowDep = new Tracker.Dependency();
 var fromNowInterval;
 
 Template.registerHelper('fromNow', function(millis) {
     fromNowDep.depend();
 
     if (! fromNowInterval) {
-        fromNowInterval = setInterval(function() {
+        fromNowInterval = Meteor.setInterval(function() {
             fromNowDep.changed();
         }, 60000);
     }
-    return moment(millis).fromNow();
+    return moment(millis - TimeSync.serverOffset()).fromNow();
 });
 
 Template.registerHelper('errorClass', function(field) {

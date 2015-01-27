@@ -129,6 +129,7 @@
       "$": false,               // jQuery
       "Router": false,           // iron-router
       "RouteController": false,
+      "TimeSync": false,
       
       // custom global vars I make
       "Hours": true,
