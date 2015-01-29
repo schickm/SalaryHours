@@ -66,3 +66,7 @@
 .tt-suggestion p {
   margin: 0;
 }
+
+#hoursInput, #minutesInput {
+  width: 50px;
+}

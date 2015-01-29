@@ -49,22 +49,12 @@
     {{/if}}
 </template>
 
-<template name='taskDetail'>
-    <h1>{{task.name}} - {{taskInterval task.duration}} hrs <a class='delete-task' href='#'>X</a></h1>
-
-    <ul>
-        {{#each durations}}
-            <li>{{startDate}} - {{taskInterval duration}} hrs <a class='delete-duration' href="#">X</a></li>
-        {{/each}}
-    </ul>
-</template>
-
 <template name='createDuration'>
     <div class='row'>
         <form class='form-inline'>
             <div class='form-group task-input-wrapper {{errorClass 'taskName'}} col-xs-8 col-sm-7 col-sm-offset-1 col-md-6 col-md-offset-2 col-lg-5 col-lg-offset-3'>
                 <div class='controls'>
-                    <input type='text' class='form-control input-lg typeahead' name='task' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' /> 
+                    <input type='text' class='form-control input-lg typeahead' name='taskName' placeholder='Task' autocomplete='off' spellcheck='off' data-source='tasks' /> 
                     <span class='help-block'>{{errorMessage 'taskName'}}</span> 
                 </div>
             </div>
@@ -121,6 +111,45 @@
     </div>
 </template>
 
+<template name='formSubmit'>
+	<div class='form-group'>
+	    <button type='submit' class='btn btn-primary'>{{showText}}</button>
+	</div>
+</template>
+
+<template name='dateTimePicker'>
+	<div class='form-group {{errorClass name}}'>
+		<label for='{{name}}'>{{label}}</label>
+		<div class='input-group datetimepicker'>
+			<span class='input-group-addon'><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+			<input class='form-control' name='{{name}}' id='{{name}}' type='text' />
+		</div>
+        <p class='help-block'>{{errorMessage name}}</p>
+	</div>
+</template>
+
+<template name='manualHoursEntry'>
+	<form class='form-inline'>
+		
+		{{> dateTimePicker name='startInput' label='Start Time:'}}
+		{{> settingsInput name='hoursInput' label='Hours:' value='0'}}
+		{{> settingsInput name='minutesInput' label='Minutes:' value='0'}}
+
+		{{> formSubmit text='Add Hours'}}
+	</form>
+</template>
+
+<template name='taskDetail'>
+    <h1>{{task.name}} - {{taskInterval task.duration}} hrs <a class='delete-task' href='#'>X</a></h1>
+
+	{{> manualHoursEntry}}
+
+    <ul>
+        {{#each durations}}
+            <li>{{startDate}} - {{taskInterval duration}} hrs <a class='delete-duration' href="#">X</a></li>
+        {{/each}}
+    </ul>
+</template>
 
 <template name='settings'>
     <div class='col-sm-12'>
@@ -128,9 +157,7 @@
         <form class='form'>
             {{> settingsInput name='yearlySalary' label='Yearly Salary' value=currentUser.profile.yearlySalary}}
 
-            <div class='form-group'>
-                <button type='submit' class='btn btn-primary'>Submit</button>
-            </div>
+            {{> formSubmit}}
         </form>
     </div>
 </template>

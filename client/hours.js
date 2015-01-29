@@ -6,17 +6,6 @@ function methodErrorHandler (error) {
     }
 }
 
-function setFormError(field, message) {
-    var errors = Session.get('formErrors');
-    errors[field] = message;
-    Session.set('formErrors', errors);
-}
-
-Meteor.startup(function() {
-    Session.set('formErrors', {});
-});
-
-
 Template.createDuration.rendered = function() {
     Meteor.typeahead($('.typeahead'));
 };
@@ -30,19 +19,15 @@ Template.createDuration.helpers({
 });
 
 Template.createDuration.events({
-    'submit form': function(e) {
-        e.preventDefault();
-        var $task = $(e.target).find('[name=task]'),
-            taskName = $task.val();
-        
-        setFormError('taskName', (! taskName ? 'Please enter a task name': null));
-
-        if (taskName) {
-            Meteor.call('startDuration', taskName, methodErrorHandler);    
-        }        
-            
-        $task.typeahead('val', '');
-    }
+    'submit form': Validation.form(
+        {taskName: [Validation.nonEmptyString, 'Please enter a task name']},
+        function(form) {
+            if (form.valid) {
+                Meteor.call('startDuration', form.data.taskName, methodErrorHandler);    
+                form.elements.taskName.typeahead('val', '');
+            }                    
+        }
+    )
 });
 
 Template.openDurations.helpers({
@@ -91,18 +76,48 @@ Template.taskDetail.events({
     }
 });
 
-Template.settings.events({
-    'submit form': function(e) {
-        e.preventDefault();
-        var salaryValue = parseInt($(e.target).find('[name=yearlySalary]').val());
-        
-        if (salaryValue) {
-            Meteor.call('setUserYearlySalary', salaryValue);    
-            Router.go('home');
-        } else {
-            setFormError('yearlySalary', 'A salary must be provided');
-        }
-        
 
+
+Template.settings.events({
+    'submit form': Validation.form(
+        {yearlySalary: [Validation.intOrNull, 'A salary must be provided']}, 
+        function(form) {
+            if (form.valid) {
+                Meteor.call('setUserYearlySalary', form.data.yearlySalary);    
+                Router.go('home');
+            }   
+        }
+    )
+});
+
+var timePickerFormat = 'MM/DD/YYYY h:mm A';
+
+Template.manualHoursEntry.events({
+    'focus input': function(e) {
+        e.target.select();
+    },
+    'submit form': Validation.form(
+        {
+            startInput: [Validation.timestampOrNull(timePickerFormat), 'Start time is required'],
+            hoursInput: [Validation.intOrNull, 'required'],
+            minutesInput: [Validation.intOrNull, 'required']
+        },
+        function(form) {
+            if (form.valid) {
+                Meteor.call('addDuration',this.task._id, form.data.startInput.valueOf(), form.data.hoursInput, form.data.minutesInput);  
+            }
+        }
+    )
+});
+
+Template.manualHoursEntry.rendered = function() {
+    $('.datetimepicker').datetimepicker({
+        format: timePickerFormat
+    });
+};
+
+Template.formSubmit.helpers({
+    showText: function() {
+        return this.text || 'Submit';
     }
-})
+});
